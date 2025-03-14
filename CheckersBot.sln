@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckersBot", "CheckersBot\CheckersBot.csproj", "{98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
