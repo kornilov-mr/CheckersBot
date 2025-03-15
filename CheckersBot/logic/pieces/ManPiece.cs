@@ -32,6 +32,18 @@ public class ManPiece : Piece
             MoveUtils.SwitchColor(Color), startMove).Cast<Move>().ToList();
     }
 
+    public bool IsAtTheEndOfTheBoard()
+    {
+        if (Color == PieceColor.White)
+        {
+            return XPosition == 7;
+        }
+        else
+        {
+            return XPosition == 0;
+        }
+    }
+
     public override string ToString()
     {
         return "ManPiece" + base.ToString();

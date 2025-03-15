@@ -163,3 +163,4 @@ C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows\CheckersBot.pdb
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows\CheckersBot.genruntimeconfig.cache
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows\ref\CheckersBot.dll
+C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows\CheckersBot.sourcelink.json

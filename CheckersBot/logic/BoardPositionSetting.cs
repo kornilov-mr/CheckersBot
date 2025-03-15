@@ -7,6 +7,8 @@ namespace CheckersBot.logic;
 /// </summary>
 public class BoardPositionSetting
 {
+    public HashSet<Piece> WhitePieces { get; } = new HashSet<Piece>();
+    public HashSet<Piece> BlackPieces { get; } = new HashSet<Piece>();
     public Piece?[,] Pieces { get; } = new Piece?[8, 8];
 
     public BoardPositionSetting(string settingFile)
@@ -24,7 +26,11 @@ public class BoardPositionSetting
             string[] piecesString = strings[i].Split(' ');
             for (int j = 0; j < piecesString.Length; j++)
             {
-                Pieces[i, j] = PieceFactory.CreatePiece(piecesString[j], i, j);
+                Piece? piece = PieceFactory.CreatePiece(piecesString[j], i, j);
+                Pieces[i, j] = piece;
+                if(piece == null) continue;
+                if(piece.Color == PieceColor.White) WhitePieces.Add(piece);
+                if(piece.Color == PieceColor.Black) BlackPieces.Add(piece);
             }
         }
     }

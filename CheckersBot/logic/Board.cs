@@ -1,6 +1,7 @@
 using CheckersBot.logic.pieces;
 
 namespace CheckersBot.logic;
+
 /// <summary>
 /// Class with all information about the board
 /// </summary>
@@ -10,22 +11,29 @@ public class Board
     /// Object for finding all attacking moves
     /// </summary>
     public AttackEdgeWalker Walker { get; }
+
     /// <summary>
     /// All pieces in 8x8
     /// </summary>
     public Piece?[,] Pieces { get; }
+
     /// <summary>
     /// All moves, that are valid at this move
     /// </summary>
     public HashSet<Move> AllAvailableNormalMoves { get; } = new HashSet<Move>();
+
     /// <summary>
     /// All attacking moves, that are valid at this move
     /// </summary>
     public HashSet<AttackingMove> AllAvailableAttackingMoves { get; } = new HashSet<AttackingMove>();
+
     /// <summary>
     /// Next color to play
     /// </summary>
     public PieceColor ColorToMove { get; private set; }
+
+    public HashSet<Piece> WhitePieces { get; }
+    public HashSet<Piece> BlackPieces { get; }
 
     public Board(BoardPositionSetting boardPositionSetting) : this(boardPositionSetting, PieceColor.Black)
     {
@@ -34,6 +42,8 @@ public class Board
     public Board(BoardPositionSetting boardPositionSetting, PieceColor startingColor)
     {
         Pieces = boardPositionSetting.Pieces;
+        WhitePieces = boardPositionSetting.WhitePieces;
+        BlackPieces = boardPositionSetting.BlackPieces;
         Walker = new AttackEdgeWalker(this);
         ColorToMove = startingColor;
         UpdateMoves(startingColor);
@@ -54,6 +64,7 @@ public class Board
     {
         return x >= 0 && y >= 0 && x < 8 && y < 8;
     }
+
     /// <summary>
     /// Executed a move, throws exception if the move wasn't valid
     /// </summary>
@@ -63,12 +74,24 @@ public class Board
     {
         if (!IsMoveEndInBounds(move)) throw new ArgumentException("Invalid move");
         Pieces[move.XEnd, move.YEnd] = Pieces[move.XStart, move.YStart];
+        Pieces[move.XStart, move.YStart] = null;
         Pieces[move.XEnd, move.YEnd]!.MoveToMoveEnd(move);
+        if (Pieces[move.XEnd, move.YEnd] is ManPiece manPiece && manPiece.IsAtTheEndOfTheBoard())
+        {
+            KingPiece newPiece = new KingPiece(move.XEnd, move.YEnd,
+                Pieces[move.XEnd, move.YEnd]!.Color);
+            Pieces[move.XEnd, move.YEnd] = newPiece;
+        }
+
         Pieces[move.XStart, move.YStart] = null;
         if (move is AttackingMove attackingMove)
         {
             foreach (var piece in attackingMove.KilledPieces)
             {
+                if (piece.Color.Equals(PieceColor.White))
+                    WhitePieces.Remove(piece);
+                if (piece.Color.Equals(PieceColor.White))
+                    BlackPieces.Remove(piece);
                 Pieces[piece.XPosition, piece.YPosition] = null;
             }
         }
@@ -76,6 +99,7 @@ public class Board
         ColorToMove = MoveUtils.SwitchColor(ColorToMove);
         UpdateMoves(ColorToMove);
     }
+
     /// <summary>
     /// Check if the move is possible
     /// </summary>
@@ -92,6 +116,7 @@ public class Board
             return false;
         return Utils.CollectionContains(AllAvailableNormalMoves, move);
     }
+
     /// <summary>
     /// Calculates all Moves based on the color
     /// </summary>
@@ -113,6 +138,7 @@ public class Board
 
         return moves;
     }
+
     /// <summary>
     /// Calculates all attacking Moves based on the color
     /// </summary>
@@ -134,6 +160,7 @@ public class Board
 
         return moves;
     }
+
     /// <summary>
     /// Updates AllAvailableNormalMoves and AllAvailableAttackingMoves for next turn
     /// </summary>
@@ -151,5 +178,20 @@ public class Board
         {
             AllAvailableAttackingMoves.Add((AttackingMove)move);
         }
+    }
+
+    /// <summary>
+    /// return the color of who won the game, if the game is still running will be null
+    /// </summary>
+    /// <returns></returns>
+    public PieceColor? WhoWonTheGame()
+    {
+        if (WhitePieces.Count == 0)
+            return PieceColor.Black;
+        if (BlackPieces.Count == 0)
+            return PieceColor.White;
+        if (AllAvailableNormalMoves.Count == 0 && AllAvailableAttackingMoves.Count == 0)
+            return MoveUtils.SwitchColor(ColorToMove);
+        return null;
     }
 }
