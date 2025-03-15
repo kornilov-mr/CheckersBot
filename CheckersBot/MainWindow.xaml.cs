@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CheckersBot.gameControl.gameController;
+using CheckersBot.logic;
 
 namespace CheckersBot;
 
@@ -16,8 +18,12 @@ namespace CheckersBot;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly Board _defaultBoard = new Board(new BoardPositionSetting(
+        PathResolver.ResolvePathFromSolutionRoot("/tests/startingPositions/defaultPosition.txt")));
     public MainWindow()
     {
+        ConsoleGameController controller = new ConsoleGameController(_defaultBoard);
+        controller.StartGame();
         InitializeComponent();
     }
 }

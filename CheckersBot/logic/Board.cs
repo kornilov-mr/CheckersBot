@@ -194,4 +194,18 @@ public class Board
             return MoveUtils.SwitchColor(ColorToMove);
         return null;
     }
+
+    public override string ToString()
+    {
+        string s = "";
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+               s+= PieceFactory.CreateStringFromPiece(Pieces[i, j])+" "; 
+            }
+            s += "\n";
+        }
+        return s;
+    }
 }

@@ -33,4 +33,24 @@ public static class PieceFactory
 
         return piece;
     }
+
+    /// <summary>
+    /// Creates string representation of a piece for console game 
+    /// </summary>
+    /// <param name="piece"> Piece to convert </param>
+    /// <returns> string representation </returns>
+    public static string CreateStringFromPiece(Piece? piece)
+    {
+        if (piece is null)
+            return "---";
+        if (piece is ManPiece && piece.Color == PieceColor.White)
+            return "MWh";
+        if (piece is ManPiece && piece.Color == PieceColor.Black)
+            return "MBl";
+        if (piece is KingPiece && piece.Color == PieceColor.White)
+            return "KWh";
+        if (piece is KingPiece && piece.Color == PieceColor.Black)
+            return "KBl";
+        return "";
+    }
 }
