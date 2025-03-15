@@ -8,6 +8,11 @@ namespace CheckersBot.logic;
 public class Board
 {
     /// <summary>
+    /// Holding all previous move that got executed
+    /// </summary>
+    public Stack<Move> MovesStack { get; } = new Stack<Move>();
+
+    /// <summary>
     /// Object for finding all attacking moves
     /// </summary>
     public AttackEdgeWalker Walker { get; }
@@ -72,10 +77,13 @@ public class Board
     /// <exception cref="ArgumentException"> throws exception if the move wasn't valid </exception>
     public void MakeAMove(Move move)
     {
-        if (!IsMoveEndInBounds(move)) throw new ArgumentException("Invalid move");
+        if (!IsMoveValid(move)) throw new ArgumentException("Invalid move");
+        move.WasMenBeforeMove = true;
         Pieces[move.XEnd, move.YEnd] = Pieces[move.XStart, move.YStart];
         Pieces[move.XStart, move.YStart] = null;
         Pieces[move.XEnd, move.YEnd]!.MoveToMoveEnd(move);
+        if (Pieces[move.XEnd, move.YEnd] is KingPiece)
+            move.WasMenBeforeMove = false;
         if (Pieces[move.XEnd, move.YEnd] is ManPiece manPiece && manPiece.IsAtTheEndOfTheBoard())
         {
             KingPiece newPiece = new KingPiece(move.XEnd, move.YEnd,
@@ -98,6 +106,41 @@ public class Board
 
         ColorToMove = MoveUtils.SwitchColor(ColorToMove);
         UpdateMoves(ColorToMove);
+        MovesStack.Push(move);
+    }
+
+    /// <summary>
+    /// Executes last move in reverse (used for the engine to path tree in reverse order) 
+    /// </summary>
+    public void UndoLastMove()
+    {
+        Move move = MovesStack.Pop();
+        move.ReverseMove();
+        Pieces[move.XEnd, move.YEnd] = Pieces[move.XStart, move.YStart];
+        Pieces[move.XStart, move.YStart] = null;
+        Pieces[move.XEnd, move.YEnd]!.MoveToMoveEnd(move);
+        if (Pieces[move.XEnd, move.YEnd] is KingPiece && move.WasMenBeforeMove)
+        {
+            ManPiece newPiece = new ManPiece(move.XEnd, move.YEnd,
+                Pieces[move.XEnd, move.YEnd]!.Color);
+            Pieces[move.XEnd, move.YEnd] = newPiece;
+        }
+
+        Pieces[move.XStart, move.YStart] = null;
+
+        if (move is AttackingMove attackingMove)
+        {
+            foreach (var piece in attackingMove.KilledPieces)
+            {
+                if (piece.Color.Equals(PieceColor.White))
+                    WhitePieces.Add(piece);
+                if (piece.Color.Equals(PieceColor.White))
+                    BlackPieces.Add(piece);
+                Pieces[piece.XPosition, piece.YPosition] = piece;
+            }
+        }
+
+        ColorToMove = MoveUtils.SwitchColor(ColorToMove);
     }
 
     /// <summary>
@@ -107,6 +150,7 @@ public class Board
     /// <returns>bool, true if valid </returns>
     public bool IsMoveValid(Move move)
     {
+        if (!IsMoveEndInBounds(move)) return false;
         if (Pieces[move.XStart, move.YStart] == null) return false;
         if (Pieces[move.XEnd, move.YEnd] != null) return false;
         if (move is AttackingMove attackingMove)
@@ -195,6 +239,49 @@ public class Board
         return null;
     }
 
+    public double EvaluateBoard()
+    {
+        PieceColor? whoWonTheGame = WhoWonTheGame();
+        if (whoWonTheGame != null)
+        {
+            if (whoWonTheGame.Equals(PieceColor.Black))
+            {
+                return double.MaxValue;
+            }
+            else
+            {
+                return double.MinValue;
+            }
+        }
+
+        double pieceCount = 0;
+        foreach (var piece in BlackPieces)
+        {
+            pieceCount += piece.PieceValue;
+        }
+        foreach (var piece in WhitePieces)
+        {
+            pieceCount -= piece.PieceValue;
+        }
+
+        double controlCount = 0;
+        if (ColorToMove.Equals(PieceColor.Black))
+        {
+            controlCount+= (double) AllAvailableNormalMoves.Count/10 +
+                           (double) AllAvailableAttackingMoves.Count/10;
+            controlCount-= (double) GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10 +
+                           (double) GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10;
+        }
+        else
+        {
+            controlCount-= (double) AllAvailableNormalMoves.Count/10 +
+                           (double) AllAvailableAttackingMoves.Count/10;
+            controlCount+= (double) GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10 +
+                           (double) GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10;
+        }
+
+        return controlCount + pieceCount;
+    }
     public override string ToString()
     {
         string s = "";
@@ -202,10 +289,44 @@ public class Board
         {
             for (int j = 0; j < 8; j++)
             {
-               s+= PieceFactory.CreateStringFromPiece(Pieces[i, j])+" "; 
+                s += PieceFactory.CreateStringFromPiece(Pieces[i, j]) + " ";
             }
+
             s += "\n";
         }
+
         return s;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (!(obj is Board board)) return false;
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (Pieces[i, j] == null && board.Pieces[i, j] == null)
+                {
+                    continue;
+                }
+
+                if (Pieces[i, j] == null && board.Pieces[i, j] != null)
+                {
+                    return false;
+                }
+
+                if (!Pieces[i, j]!.Equals(board.Pieces[i, j]))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        return Pieces.GetHashCode();
     }
 }

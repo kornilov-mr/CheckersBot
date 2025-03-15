@@ -15,4 +15,8 @@
       <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="engine\" />
+    </ItemGroup>
+
 </Project>

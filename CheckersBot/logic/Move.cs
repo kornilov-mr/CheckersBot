@@ -7,10 +7,11 @@ namespace CheckersBot.logic;
 /// </summary>
 public class Move
 {
-    public int XStart { get; }
-    public int YStart { get; }
+    public int XStart { get; set; }
+    public int YStart { get; set; }
     public int XEnd { get; set; }
     public int YEnd { get; set; }
+    public bool WasMenBeforeMove { get; set; }
 
     public Move(int xStart, int yStart, int xEnd, int yEnd)
     {
@@ -38,6 +39,11 @@ public class Move
         return XStart == XEnd && YStart == YEnd;
     }
 
+    public void ReverseMove()
+    {
+        (XEnd, XStart) = (XStart, XEnd);
+        (YEnd, YStart) = (YStart, YEnd);
+    }
     public override string ToString()
     {
         return "Move{" +

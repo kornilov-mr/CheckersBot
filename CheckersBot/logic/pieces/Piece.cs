@@ -6,15 +6,17 @@ namespace CheckersBot.logic.pieces;
 
 public abstract class Piece
 {
+    public int PieceValue { get; }
     public int XPosition { get; private set; }
     public int YPosition { get; private set; }
     public PieceColor Color { get; }
 
-    public Piece(int xPosition, int yPosition, PieceColor color)
+    public Piece(int xPosition, int yPosition, PieceColor color, int pieceValue)
     {
         XPosition = xPosition;
         YPosition = yPosition;
         Color = color;
+        PieceValue = pieceValue;
     }
     /// <summary>
     /// Changes Position to move end

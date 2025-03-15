@@ -4,7 +4,7 @@ namespace CheckersBot.logic.pieces;
 /// </summary>
 public class ManPiece : Piece
 {
-    public ManPiece(int xPosition, int yPosition, PieceColor color) : base(xPosition, yPosition, color)
+    public ManPiece(int xPosition, int yPosition, PieceColor color) : base(xPosition, yPosition, color,1)
     {
     }
 
