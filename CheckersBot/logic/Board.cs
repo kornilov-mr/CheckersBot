@@ -37,37 +37,22 @@ public class Board
     /// </summary>
     public PieceColor ColorToMove { get; private set; }
 
-    public HashSet<Piece> WhitePieces { get; }
-    public HashSet<Piece> BlackPieces { get; }
-
-    public Board(BoardPositionSetting boardPositionSetting) : this(boardPositionSetting, PieceColor.Black)
+    public Board(BoardPositionSetting boardPositionSetting) :
+        this(boardPositionSetting, PieceColor.Black)
     {
     }
 
-    public Board(BoardPositionSetting boardPositionSetting, PieceColor startingColor)
+    public Board(BoardPositionSetting boardPositionSetting, PieceColor startingColor) :
+        this(boardPositionSetting.Pieces!, startingColor)
     {
-        Pieces = boardPositionSetting.Pieces;
-        WhitePieces = boardPositionSetting.WhitePieces;
-        BlackPieces = boardPositionSetting.BlackPieces;
+    }
+
+    public Board(Piece[,] pieces, PieceColor startingColor)
+    {
+        Pieces = pieces;
         Walker = new AttackEdgeWalker(this);
         ColorToMove = startingColor;
         UpdateMoves(startingColor);
-    }
-
-    public Piece? GetPieceOnMoveEnd(Move move)
-    {
-        if (!IsMoveEndInBounds(move)) return null;
-        return Pieces[move.XEnd, move.YEnd];
-    }
-
-    public bool IsMoveEndInBounds(Move move)
-    {
-        return IsInBounds(move.XEnd, move.YEnd);
-    }
-
-    public bool IsInBounds(int x, int y)
-    {
-        return x >= 0 && y >= 0 && x < 8 && y < 8;
     }
 
     /// <summary>
@@ -77,13 +62,17 @@ public class Board
     /// <exception cref="ArgumentException"> throws exception if the move wasn't valid </exception>
     public void MakeAMove(Move move)
     {
-        if (!IsMoveValid(move)) throw new ArgumentException("Invalid move");
+        if (!IsMoveValid(move)) throw new ArgumentException("Invalid move:" + move);
         move.WasMenBeforeMove = true;
-        Pieces[move.XEnd, move.YEnd] = Pieces[move.XStart, move.YStart];
+        Piece pieceOnStart = Pieces[move.XStart, move.YStart]!;
+        Piece pieceClone = pieceOnStart.CloneWithNewPosition(move.XEnd, move.YEnd);
+        Pieces[move.XEnd, move.YEnd] = pieceClone;
         Pieces[move.XStart, move.YStart] = null;
-        Pieces[move.XEnd, move.YEnd]!.MoveToMoveEnd(move);
+
+
         if (Pieces[move.XEnd, move.YEnd] is KingPiece)
             move.WasMenBeforeMove = false;
+        
         if (Pieces[move.XEnd, move.YEnd] is ManPiece manPiece && manPiece.IsAtTheEndOfTheBoard())
         {
             KingPiece newPiece = new KingPiece(move.XEnd, move.YEnd,
@@ -96,10 +85,6 @@ public class Board
         {
             foreach (var piece in attackingMove.KilledPieces)
             {
-                if (piece.Color.Equals(PieceColor.White))
-                    WhitePieces.Remove(piece);
-                if (piece.Color.Equals(PieceColor.White))
-                    BlackPieces.Remove(piece);
                 Pieces[piece.XPosition, piece.YPosition] = null;
             }
         }
@@ -115,32 +100,32 @@ public class Board
     public void UndoLastMove()
     {
         Move move = MovesStack.Pop();
-        move.ReverseMove();
-        Pieces[move.XEnd, move.YEnd] = Pieces[move.XStart, move.YStart];
-        Pieces[move.XStart, move.YStart] = null;
-        Pieces[move.XEnd, move.YEnd]!.MoveToMoveEnd(move);
-        if (Pieces[move.XEnd, move.YEnd] is KingPiece && move.WasMenBeforeMove)
+        Move reversedMove = move.ReverseMove();
+        Piece pieceOnStart = Pieces[reversedMove.XStart, reversedMove.YStart]!;
+        Piece pieceClone = pieceOnStart.CloneWithNewPosition(reversedMove.XEnd, reversedMove.YEnd);
+
+        Pieces[reversedMove.XEnd, reversedMove.YEnd] = pieceClone;
+        Pieces[reversedMove.XStart, reversedMove.YStart] = null;
+
+        if (Pieces[reversedMove.XEnd, reversedMove.YEnd] is KingPiece && reversedMove.WasMenBeforeMove)
         {
-            ManPiece newPiece = new ManPiece(move.XEnd, move.YEnd,
-                Pieces[move.XEnd, move.YEnd]!.Color);
-            Pieces[move.XEnd, move.YEnd] = newPiece;
+            ManPiece newPiece = new ManPiece(reversedMove.XEnd, reversedMove.YEnd,
+                Pieces[reversedMove.XEnd, reversedMove.YEnd]!.Color);
+            Pieces[reversedMove.XEnd, reversedMove.YEnd] = newPiece;
         }
 
-        Pieces[move.XStart, move.YStart] = null;
+        Pieces[reversedMove.XStart, reversedMove.YStart] = null;
 
-        if (move is AttackingMove attackingMove)
+        if (reversedMove is AttackingMove attackingMove)
         {
             foreach (var piece in attackingMove.KilledPieces)
             {
-                if (piece.Color.Equals(PieceColor.White))
-                    WhitePieces.Add(piece);
-                if (piece.Color.Equals(PieceColor.White))
-                    BlackPieces.Add(piece);
                 Pieces[piece.XPosition, piece.YPosition] = piece;
             }
         }
 
         ColorToMove = MoveUtils.SwitchColor(ColorToMove);
+        UpdateMoves(ColorToMove);
     }
 
     /// <summary>
@@ -161,6 +146,13 @@ public class Board
         return Utils.CollectionContains(AllAvailableNormalMoves, move);
     }
 
+    public HashSet<Move> GetActualValidMoves()
+    {
+        if (AllAvailableAttackingMoves.Count == 0)
+            return AllAvailableNormalMoves;
+        return AllAvailableAttackingMoves.Cast<Move>().ToHashSet();
+    }
+
     /// <summary>
     /// Calculates all Moves based on the color
     /// </summary>
@@ -173,7 +165,7 @@ public class Board
         {
             for (int j = 0; j < 8; j++)
             {
-                if (Pieces[j, i] != null && Pieces[j, i]!.Color.Equals(color))
+                if (Pieces[j, i] != null && Pieces[j, i]!.Color == color)
                 {
                     moves.AddRange(Pieces[j, i]!.GetAllMovesInBounds(this));
                 }
@@ -195,7 +187,7 @@ public class Board
         {
             for (int j = 0; j < 8; j++)
             {
-                if (Pieces[j, i] != null && Pieces[j, i]!.Color.Equals(color))
+                if (Pieces[j, i] != null && Pieces[j, i]!.Color == color)
                 {
                     moves.AddRange(Pieces[j, i]!.GetAllAttackingMovesInBounds(this));
                 }
@@ -230,10 +222,6 @@ public class Board
     /// <returns></returns>
     public PieceColor? WhoWonTheGame()
     {
-        if (WhitePieces.Count == 0)
-            return PieceColor.Black;
-        if (BlackPieces.Count == 0)
-            return PieceColor.White;
         if (AllAvailableNormalMoves.Count == 0 && AllAvailableAttackingMoves.Count == 0)
             return MoveUtils.SwitchColor(ColorToMove);
         return null;
@@ -255,33 +243,80 @@ public class Board
         }
 
         double pieceCount = 0;
-        foreach (var piece in BlackPieces)
+
+        for (int i = 0; i < 8; i++)
         {
-            pieceCount += piece.PieceValue;
-        }
-        foreach (var piece in WhitePieces)
-        {
-            pieceCount -= piece.PieceValue;
+            for (int j = 0; j < 8; j++)
+            {
+                if (Pieces[j, i] != null)
+                {
+                    if (Pieces[j, i]!.Color == PieceColor.Black)
+                    {
+                        pieceCount += Pieces[j, i]!.PieceValue;
+                    }
+                    else
+                    {
+                        pieceCount -= Pieces[j, i]!.PieceValue;
+                    }
+                }
+            }
         }
 
         double controlCount = 0;
         if (ColorToMove.Equals(PieceColor.Black))
         {
-            controlCount+= (double) AllAvailableNormalMoves.Count/10 +
-                           (double) AllAvailableAttackingMoves.Count/10;
-            controlCount-= (double) GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10 +
-                           (double) GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10;
+            controlCount += (double)AllAvailableNormalMoves.Count / 10 +
+                            (double)AllAvailableAttackingMoves.Count / 10;
+            controlCount -= (double)GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count / 10 +
+                            (double)GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count / 10;
         }
         else
         {
-            controlCount-= (double) AllAvailableNormalMoves.Count/10 +
-                           (double) AllAvailableAttackingMoves.Count/10;
-            controlCount+= (double) GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10 +
-                           (double) GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count/10;
+            controlCount -= (double)AllAvailableNormalMoves.Count / 10 +
+                            (double)AllAvailableAttackingMoves.Count / 10;
+            controlCount += (double)GetAllMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count / 10 +
+                            (double)GetAllAttackingMovesForColor(MoveUtils.SwitchColor(ColorToMove)).Count / 10;
         }
 
         return controlCount + pieceCount;
     }
+
+    /// <summary>
+    /// Clones board and all pieces
+    /// </summary>
+    /// <returns> New board with the same parameters </returns>
+    public Board Clone()
+    {
+        Piece?[,] pieces = new Piece?[8, 8];
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                if (Pieces[i, j] == null)
+                    continue;
+                pieces[i, j] = Pieces[i, j]!.Clone();
+            }
+        }
+
+        return new Board(pieces!, ColorToMove);
+    }
+
+    public bool IsInBounds(int x, int y)
+    {
+        return x >= 0 && y >= 0 && x < 8 && y < 8;
+    }
+
+    public Piece? GetPieceOnMoveEnd(Move move)
+    {
+        if (!IsMoveEndInBounds(move)) return null;
+        return Pieces[move.XEnd, move.YEnd];
+    }
+
+    public bool IsMoveEndInBounds(Move move)
+    {
+        return IsInBounds(move.XEnd, move.YEnd);
+    }
+
     public override string ToString()
     {
         string s = "";

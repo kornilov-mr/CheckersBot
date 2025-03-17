@@ -25,6 +25,16 @@ public class KingPiece : Piece
             MoveUtils.SwitchColor(Color), startMove).Cast<Move>().ToList();
     }
 
+    public override Piece Clone()
+    {
+        return new KingPiece(XPosition, YPosition, Color);
+    }
+
+    public override Piece CloneWithNewPosition(int x, int y)
+    {
+        return new KingPiece(x, y, Color);
+    }
+
     public override string ToString()
     {
         return "KingPiece" + base.ToString();

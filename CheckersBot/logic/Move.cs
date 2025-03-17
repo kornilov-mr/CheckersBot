@@ -7,8 +7,8 @@ namespace CheckersBot.logic;
 /// </summary>
 public class Move
 {
-    public int XStart { get; set; }
-    public int YStart { get; set; }
+    public int XStart { get; }
+    public int YStart { get; }
     public int XEnd { get; set; }
     public int YEnd { get; set; }
     public bool WasMenBeforeMove { get; set; }
@@ -30,8 +30,10 @@ public class Move
     }
 
     public Object Clone()
-    {
-        return new Move(XStart, YStart, XEnd, YEnd);
+    {  
+        Move newMove = new Move(XStart, YStart, XEnd, YEnd);
+        newMove.WasMenBeforeMove = WasMenBeforeMove;
+        return newMove;
     }
 
     public bool IsInPlace()
@@ -39,10 +41,11 @@ public class Move
         return XStart == XEnd && YStart == YEnd;
     }
 
-    public void ReverseMove()
+    public virtual Move ReverseMove()
     {
-        (XEnd, XStart) = (XStart, XEnd);
-        (YEnd, YStart) = (YStart, YEnd);
+        Move newMove = new Move(XEnd, YEnd, XStart, YStart);
+        newMove.WasMenBeforeMove = WasMenBeforeMove;
+        return newMove;
     }
     public override string ToString()
     {

@@ -1,4 +1,3 @@
-// ReSharper disable NonReadonlyMemberInGetHashCode
 namespace CheckersBot.logic.pieces;
 /// <summary>
 /// Abstract class for all pieces
@@ -7,8 +6,8 @@ namespace CheckersBot.logic.pieces;
 public abstract class Piece
 {
     public int PieceValue { get; }
-    public int XPosition { get; private set; }
-    public int YPosition { get; private set; }
+    public int XPosition { get; }
+    public int YPosition { get; }
     public PieceColor Color { get; }
 
     public Piece(int xPosition, int yPosition, PieceColor color, int pieceValue)
@@ -17,15 +16,6 @@ public abstract class Piece
         YPosition = yPosition;
         Color = color;
         PieceValue = pieceValue;
-    }
-    /// <summary>
-    /// Changes Position to move end
-    /// </summary>
-    /// <param name="move">Move that is being executed</param>
-    public void MoveToMoveEnd(Move move)
-    {
-        XPosition = move.XEnd;
-        YPosition = move.YEnd;
     }
     /// <summary>
     /// Returns all Moves from abstract method, which are in bound of the Board
@@ -46,7 +36,7 @@ public abstract class Piece
     {
         return MoveUtils.FilterMoveOutOfBounds(GetAllAttackingMoves(board),
             board);
-    }
+    }  
     /// <summary>
     /// Returns all Moves that are possible
     /// </summary>
@@ -59,7 +49,18 @@ public abstract class Piece
     /// <param name="board">Main playing board</param>
     /// <returns>Collection on move, that are possible</returns>
     protected abstract List<Move> GetAllAttackingMoves(Board board);
-
+    /// <summary>
+    /// Fully clones the object
+    /// </summary>
+    /// <returns> new piece with the same parameters </returns>
+    public abstract Piece Clone();
+    /// <summary>
+    /// Fully clones the object but with different location
+    /// </summary>
+    /// <param name="x"> X-position </param>
+    /// <param name="y"> Y-position </param>
+    /// <returns> new piece on new place </returns>
+    public abstract Piece CloneWithNewPosition(int x, int y);
     public override string ToString()
     {
         return "Piece{" +

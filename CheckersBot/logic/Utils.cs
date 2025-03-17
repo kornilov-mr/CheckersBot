@@ -1,4 +1,5 @@
 
+
 namespace CheckersBot.logic;
 
 public static class Utils

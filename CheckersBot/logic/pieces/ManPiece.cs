@@ -1,6 +1,6 @@
 namespace CheckersBot.logic.pieces;
 /// <summary>
-/// Piece, which can move back
+/// Piece, which can't move back
 /// </summary>
 public class ManPiece : Piece
 {
@@ -30,6 +30,16 @@ public class ManPiece : Piece
         AttackingMove startMove = new AttackingMove(XPosition, YPosition, XPosition, YPosition);
         return board.Walker.GetAllAttackingMovesFromSquare(XPosition, YPosition,
             MoveUtils.SwitchColor(Color), startMove).Cast<Move>().ToList();
+    }
+
+    public override Piece Clone()
+    {
+        return new ManPiece(XPosition, YPosition, Color);
+    }
+
+    public override Piece CloneWithNewPosition(int x, int y)
+    {
+        return new ManPiece(x, y, Color);
     }
 
     public bool IsAtTheEndOfTheBoard()

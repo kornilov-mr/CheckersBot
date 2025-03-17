@@ -47,6 +47,14 @@ public class AttackingMove(int xStart, int yStart, int xEnd, int yEnd)
         return move;
     }
 
+    public override Move ReverseMove()
+    {
+        AttackingMove newMove = new AttackingMove(XEnd, YEnd, XStart, YStart);
+        newMove.AddKilledPieces(KilledPieces);
+        newMove.AddVisitedSquares(VisitedSquares);
+        return newMove;
+    }
+
     public override string ToString()
     {
         return base.ToString() + " KilledPiece:" + Utils.CollectionToString(KilledPieces) +
