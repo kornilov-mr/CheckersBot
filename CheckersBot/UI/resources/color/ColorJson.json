@@ -1,0 +1,18 @@
+[
+  {
+    "name": "PlayingField1",
+    "ColorRGB": {
+      "R": 158,
+      "G": 13,
+      "B": 13
+    }
+  },
+  {
+    "name": "PlayingField2",
+    "ColorRGB": {
+      "R": 255,
+      "G": 255,
+      "B": 255
+    }
+  }
+]

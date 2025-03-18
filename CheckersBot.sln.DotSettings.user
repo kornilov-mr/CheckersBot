@@ -16,31 +16,13 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=89f4d80e_002Dd2b1_002D41d4_002D9422_002Da0fd7f633866/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SimpleOneThreadDFSTest1 #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.MasterThreadTests.SimpleOneThreadDFSTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest2&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest3&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest5&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.MasterThreadTests.MasterThreadTest3&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.MasterThreadTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.logic.UndoMoveTests.UndoPromotionTest&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3f79291_002D0b54_002D4f58_002D9cfd_002D5b4e07d1febc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SimpleOneThreadDFSTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.MasterThreadTests.SimpleOneThreadDFSTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests.SimpleOneThreadDFSTest2&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fa9ebc64_002D666d_002D4d18_002Da6a8_002D2a2a185caaed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SimpleOneThreadDFSTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fa9ebc64_002D666d_002D4d18_002Da6a8_002D2a2a185caaed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SimpleOneThreadDFSTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.WorkingTaskTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::98A012A3-3CC5-40F5-A4CC-BF6DBFEFEBBA::net8.0-windows::CheckersBot.tests.engine.MasterThreadTests.SimpleOneThreadDFSTest1&lt;/TestId&gt;&#xD;

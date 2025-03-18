@@ -183,3 +183,4 @@ C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\bin\Debug\net8.0-windows
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\bin\Debug\net8.0-windows\System.Text.Encodings.Web.dll
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\bin\Debug\net8.0-windows\System.Text.Json.dll
 C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\bin\Debug\net8.0-windows\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+C:\Users\ThinkPad\RiderProjects\CheckersBot\CheckersBot\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
