@@ -40,13 +40,6 @@ public class KingPiece : Piece
         return "KingPiece" + base.ToString();
     }
 
-    public override bool Equals(object? obj)
-    {
-        return base.Equals(obj) && obj is KingPiece;
-    }
+    
 
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
 }

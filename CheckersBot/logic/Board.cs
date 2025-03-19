@@ -62,6 +62,10 @@ public class Board
     /// <exception cref="ArgumentException"> throws exception if the move wasn't valid </exception>
     public void MakeAMove(Move move)
     {
+        if (!IsMoveValid(move))
+        {
+            Console.WriteLine($"Invalid move: {move}");
+        }
         if (!IsMoveValid(move)) throw new ArgumentException("Invalid move:" + move);
         move.WasMenBeforeMove = true;
         Piece pieceOnStart = Pieces[move.XStart, move.YStart]!;
@@ -306,12 +310,28 @@ public class Board
         return x >= 0 && y >= 0 && x < 8 && y < 8;
     }
 
+    public Piece? GetPieceInBetweenMove(Move move)
+    {
+        if (!IsMoveStartInBounds(move)) return null;
+        if (!IsMoveEndInBounds(move)) return null;
+        if (!(Math.Abs(move.XEnd - move.XStart) == 2 && Math.Abs(move.YStart - move.YEnd) == 2)) return null;
+        return Pieces[(move.XEnd + move.XStart) / 2, (move.YEnd + move.YStart) / 2];
+        
+    }
+    public Piece? GetPieceOnMoveStart(Move move)
+    {
+        if (!IsMoveStartInBounds(move)) return null;
+        return Pieces[move.XStart, move.YStart];
+    }
     public Piece? GetPieceOnMoveEnd(Move move)
     {
         if (!IsMoveEndInBounds(move)) return null;
         return Pieces[move.XEnd, move.YEnd];
     }
-
+    public bool IsMoveStartInBounds(Move move)
+    {
+        return IsInBounds(move.XStart, move.YStart);
+    }
     public bool IsMoveEndInBounds(Move move)
     {
         return IsInBounds(move.XEnd, move.YEnd);

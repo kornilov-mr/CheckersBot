@@ -3,11 +3,13 @@ using CheckersBot.logic;
 
 namespace CheckersBot.gameControl.gameController;
 
+public delegate void OnMove(Move move);
 public abstract class AbstractGameController(Board board)
 {
+    protected PieceColor ColorToMove { get; private set; } =PieceColor.Black;
     public Board Board { get; } = board;
     private HashSet<INotifyState> StatesSubs { get; } = new HashSet<INotifyState>();
-    private HashSet<INotifyMove> MoveSubs { get; } = new HashSet<INotifyMove>();
+    public event OnMove OnMovePlayed = null!;
     private bool _gameStarted;
 
     public void StartGame()
@@ -18,19 +20,16 @@ public abstract class AbstractGameController(Board board)
 
     protected abstract void StartGameInternal();
 
-    public void MakeAMove(Move move)
+    public virtual void MakeAMove(Move move)
     {
         Board.MakeAMove(move);
+        ColorToMove = MoveUtils.SwitchColor(ColorToMove);
         foreach (var sub in StatesSubs)
         {
             sub.NotifyChangeColor(Board.ColorToMove);
             sub.NotifyWin(Board.WhoWonTheGame());
         }
-
-        foreach (var sub in MoveSubs)
-        {
-            sub.ReportMove(move);
-        }
+        OnMovePlayed(move);
     }
 
     public bool IsMoveValid(Move move)
@@ -41,10 +40,5 @@ public abstract class AbstractGameController(Board board)
     public void AddStateNotifier(INotifyState sub)
     {
         StatesSubs.Add(sub);
-    }
-
-    public void AddMoveNotifier(INotifyMove sub)
-    {
-        MoveSubs.Add(sub);
     }
 }

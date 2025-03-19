@@ -145,7 +145,7 @@ public class MasterThread(Board baseBoard, int maxDepth, long maxTimeToCalculate
     private void ReturnPrematurely(object sender, ElapsedEventArgs e)
     {
         _working = false;
-        ReportMove(NewBestMoveSequence, NewBestEval);
+        ReportMove(_currBestMoveSequence, NewBestEval);
         WorkingThreadPolling.InterruptAllThreads();
     }
 }

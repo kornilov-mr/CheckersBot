@@ -3,6 +3,8 @@ using CheckersBot.UI.resources.color;
 using CheckersBot.utils;
 using Color = System.Windows.Media.Color;
 using System.Text.Json;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace CheckersBot.UI.resources;
@@ -13,10 +15,10 @@ namespace CheckersBot.UI.resources;
 public class Resource
 {
     private static readonly string JsonColorPath =
-        PathResolver.ResolvePathFromSolutionRoot(@"UI\resources\color\NColorJson.json");
+        PathResolver.ResolvePathFromSolutionRoot(@"UI\resources\color\ColorJson.json");
 
     private static readonly string JsonIconPath =
-        PathResolver.ResolvePathFromSolutionRoot(@"UI\resources\icons\IconPaths.png");
+        PathResolver.ResolvePathFromSolutionRoot(@"UI\resources\icons\IconPaths.json");
 
     private static Dictionary<string, Object> _resources = new();
 
@@ -60,14 +62,16 @@ public class Resource
     /// </summary>
     /// <param name="name"> string to take object for resources</param>
     /// <returns> BitmapImage from resources </returns>
-    public static BitmapImage GetIcon(string name)
+    public static Image GetIcon(string name)
     {
         if (_resources.Count == 0)
         {
             LoadResources();
         }
-
-        return (BitmapImage)_resources[name];
+        if(!_resources.ContainsKey(name)) throw new KeyNotFoundException("couldn't find resource with key:"+name);
+        Image icon = new Image();
+        icon.Source = (ImageSource)_resources[name];
+        return icon;
     }
 
     private static void LoadResources()
@@ -92,7 +96,8 @@ public class Resource
     {
         BitmapImage bitmap = new BitmapImage();
         bitmap.BeginInit();
-        bitmap.UriSource = new Uri(imagePath);
+        
+        bitmap.UriSource = new Uri(logic.PathResolver.ResolvePathFromSolutionRoot(imagePath));
         bitmap.DecodePixelWidth = size;
         bitmap.DecodePixelHeight = size;
         bitmap.EndInit();

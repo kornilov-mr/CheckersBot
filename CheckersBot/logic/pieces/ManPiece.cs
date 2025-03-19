@@ -59,11 +59,7 @@ public class ManPiece : Piece
         return "ManPiece" + base.ToString();
     }
 
-    public override bool Equals(object? obj)
-    {
-        return base.Equals(obj) && obj is ManPiece;
-    }
-
+   
     public override int GetHashCode()
     {
         return base.GetHashCode();

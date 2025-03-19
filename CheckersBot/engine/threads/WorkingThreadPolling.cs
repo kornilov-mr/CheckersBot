@@ -74,7 +74,7 @@ public class WorkingThreadPolling
             thread.Interrupt();
         }
 
-        CurrAvailableThreads = Math.Max(int.Parse(Environment.GetEnvironmentVariable("MAX_THREADS_COUNT")!),
-            Environment.ProcessorCount - int.Parse(Environment.GetEnvironmentVariable("THREAD_LEFT_FOR_SYSTEM")!));
+        // CurrAvailableThreads = Math.Max(int.Parse(Environment.GetEnvironmentVariable("MAX_THREADS_COUNT")!),
+            // Environment.ProcessorCount - int.Parse(Environment.GetEnvironmentVariable("THREAD_LEFT_FOR_SYSTEM")!));
     }
 }

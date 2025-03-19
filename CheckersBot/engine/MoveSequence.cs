@@ -22,6 +22,11 @@ public class MoveSequence
         return this;
     }
 
+    public Move GetFirstMove()
+    {
+        return MoveStack[0];
+    }
+
     public override string ToString()
     {
         string s = "";

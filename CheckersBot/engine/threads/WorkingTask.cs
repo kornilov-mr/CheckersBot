@@ -1,5 +1,4 @@
 using CheckersBot.logic;
-using CheckersBot.logic.pieces;
 using CheckersBot.utils;
 using Microsoft.Extensions.Logging;
 
@@ -69,16 +68,25 @@ public class WorkingTask
     /// </summary>
     public void Run()
     {
-        _consoleLogger.LogInformation("Started new WorkingTask \n" +
-                                      "Starting Color: " + ColorToMove + "\n" +
-                                      "maxDepth: " + MaxDepth);
-        if (LoggerSingleton.DetailedLogger)
-            _consoleLogger.LogInformation("Board: " + BoardInThread);
-        var result = DfsEvaluation(BoardInThread, 0, null);
+        try
+        {
+            _consoleLogger.LogInformation("Started new WorkingTask \n" +
+                                          "Starting Color: " + ColorToMove + "\n" +
+                                          "maxDepth: " + MaxDepth);
+            if (LoggerSingleton.DetailedLogger)
+                _consoleLogger.LogInformation("Board: " + BoardInThread);
+            (MoveSequence, double) result;
 
-        ReportResult.Invoke(MoveSequence.JoinSequence(result.Item1), result.Item2);
-        if (OnExit != null)
+            result = DfsEvaluation(BoardInThread, 0, null);
+
+            ReportResult.Invoke(MoveSequence.JoinSequence(result.Item1), result.Item2);
             OnExit.Invoke();
+        }
+        catch (ThreadInterruptedException)
+        {
+            _consoleLogger.LogInformation($"Thread {Thread.CurrentThread.ManagedThreadId} was interrupted!");
+            return;
+        }
     }
 
     /// <summary>
