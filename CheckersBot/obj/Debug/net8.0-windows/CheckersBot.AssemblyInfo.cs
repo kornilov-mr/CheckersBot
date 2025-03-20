@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CheckersBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb49ff210faefdc29dcabc613d16e2ced192baf4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf8633913b8e32a0aa730b6d1c7d10afd1d0ee52")]
 [assembly: System.Reflection.AssemblyProductAttribute("CheckersBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CheckersBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

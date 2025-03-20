@@ -20,6 +20,13 @@ public class BotGameController(Board board, PieceColor playerColor, long maxTime
 
     protected override void StartGameInternal()
     {
+        if (PlayerColor.Equals(MoveUtils.SwitchColor(ColorToMove)))
+        {
+            MasterThread masterThread = new MasterThread(Board, _maxSearchDepth, MaxTimerForEngine);
+            masterThread.ReportMove += WaitForBotSequence;
+            Thread thread = new Thread(masterThread.StartCalculation);
+            thread.Start();
+        }
     }
     /// <summary>
     /// After making a move starts the engine 
@@ -44,7 +51,6 @@ public class BotGameController(Board board, PieceColor playerColor, long maxTime
     /// <param name="eval"> evaluation of the position </param>
     private void WaitForBotSequence(MoveSequence moveSequence, double eval)
     {
-        Console.WriteLine(moveSequence.GetFirstMove());
         base.MakeAMove(moveSequence.GetFirstMove());
     }
 }
