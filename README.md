@@ -9,7 +9,7 @@ To run a project simply clone it:
 ````bash
 git clone https://github.com/kornilov-mr/CheckersBot.git
 ````
-And add your gpt api key in *.env* file in the root:
+And add your gpt api key in *.env* file in the root:<br>
 ![img.png](img.png) <br>
 For testing:
 ````bash
