@@ -10,7 +10,7 @@ To run a project simply clone it:
 git clone https://github.com/kornilov-mr/CheckersBot.git
 ````
 And add your gpt api key in *.env* file in the root:
-![img.png](img.png)
+![img.png](img.png) <br>
 For testing:
 ````bash
 dotnet test
