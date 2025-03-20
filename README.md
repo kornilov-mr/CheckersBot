@@ -1,4 +1,4 @@
-# Checkers bot 
+# Checkers bot
 This project is a little UI application for jetbrains internship, <br>
 Which contains UI for checkers and a small Checkers engine to calculate best moves in parallel
 ##### P.S
