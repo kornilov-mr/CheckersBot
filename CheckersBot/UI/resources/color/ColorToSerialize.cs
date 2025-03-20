@@ -13,7 +13,6 @@ namespace CheckersBot.UI.resources.color
         public Color ToColor()
         {
             var color = System.Drawing.Color.FromArgb(R, G, B);
-            Console.WriteLine(Color.FromRgb(color.R, color.G, color.B));
             return Color.FromRgb(color.R,color.G,color.B);
         }
     }

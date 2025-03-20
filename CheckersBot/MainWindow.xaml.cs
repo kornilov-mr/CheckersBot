@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using CheckersBot.logic;
 using DotNetEnv;
 using PathResolver = CheckersBot.logic.PathResolver;
 

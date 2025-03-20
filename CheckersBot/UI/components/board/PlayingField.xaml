@@ -21,6 +21,8 @@
             <TextBox x:Name="MaxCalculationTimeTextBox" PreviewTextInput="IntegerTextBox_PreviewTextInput"/>
             <settings:PieceColorComboBox x:Name="ColorComboBox"/>
             <Button x:Name="StartGameButton" Click="CreateGame"> start game </Button>
+            <Button x:Name="AskForHelp" Click="CallToGptApi"> ask for help </Button>
+            <TextBox x:Name="ResponseTextBox"  IsEnabled="False" Width="200" TextWrapping="Wrap"> gpt response </TextBox>
         </settings:SettingChooser>
     </StackPanel>
 </UserControl>
